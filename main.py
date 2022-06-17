@@ -27,16 +27,25 @@ clock = pygame.time.Clock()
 carImg = pygame.image.load("images/car.png")  # картинка для игрока
 carImg = pygame.transform.scale(carImg, (70, 80))  # задаем размер картинки, если большая
 car_width = 73
+carImg2 = pygame.image.load("images/car2.png")  # картинка для игрока
+carImg2 = pygame.transform.scale(carImg2, (50, 80))  # задаем размер картинки, если большая
+murder = pygame.transform.scale((pygame.image.load('images/14Um.gif')), (150,100))
 
 
 # функция для появляющихся элементов на дороге
-def things(thingx, thingy, thingw, thingh, color):
-    pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
+def things(thingx, thingy, thingw, thingh):
+    gameDisplay.blit(murder, (thingx, thingy, thingw, thingh))
 
 
 # отрисовка авто
 def car(x, y):
     gameDisplay.blit(carImg, (x, y))
+
+
+def car2(w, h):
+    gameDisplay.blit(carImg2, (w, h))
+
+
 
 
 # обработка текста
@@ -68,15 +77,19 @@ def game_loop():
     # размещение
     x = (display_width * 0.45)
     y = (display_height * 0.8)
+    w = (display_width * 0.25)
+    h = (display_height * 0.8)
 
-    # параметры для появления things
+ # параметры для появления things
+
     thing_startx = random.randrange(0, display_width)
     thing_starty = -600
     thing_speed = 5
     thing_width = 100
     thing_height = 100
 
-    x_change = 0  # позиция
+    x_change = 0
+    w_change = 0  # позиция
     gameExit = False
 
     while not gameExit:
@@ -93,34 +106,49 @@ def game_loop():
                 if event.key == pygame.K_ESCAPE:
                     crashed = True
                     pygame.quit()
+                    sys.exit()
 
                 if event.key == pygame.K_LEFT:
                     x_change = -5
 
-                elif event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT:
                     x_change = 5
+                if event.key == pygame.K_a:
+                    w_change = -5
+
+                if event.key == pygame.K_d:
+                    w_change = 5
 
             # условия для движения
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_d or event.key == pygame.K_a:
                     x_change = 0
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_d or event.key == pygame.K_a:
+                    w_change = 0
 
         # смена позиции
         x += x_change
+        w += w_change
 
         # фон
         gameDisplay.fill(white)
         # вызов things
-        things(thing_startx, thing_starty, thing_width, thing_height, black)
+        things(thing_startx, thing_starty, thing_width, thing_height)
         thing_starty += thing_speed # скорость +
 
         # создаем машину
         car(x, y)
+        car2(w, h)
 
         # задаем границы
         if x > display_width - car_width or x < 0:
             gameExit = True
             crash()
+        if w > display_width - car_width or w < 0:
+            gameExit = True
+            crash()
+
 
         if thing_starty > display_height:
             thing_starty = 0 - thing_height
