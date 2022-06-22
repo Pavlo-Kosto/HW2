@@ -1,67 +1,20 @@
 import random
-
-import pygame
 import sys
 import time
+from setting.color import *
+from setting.display import *
+from setting.players import *
+from setting.murder import *
+from setting.score import *
 
-# стартуем в файле модули пайгейм
 pygame.init()
 
-# размер окна
-display_width = 800  # параметр ширины
-display_height = 600  # параметр высоты
-
-# окно игры
-gameDisplay = pygame.display.set_mode((display_width, display_height))  # размер
-pygame.display.set_caption("Don't crush my car, dude!")  # название
-bg = pygame.image.load("images/space.jpg")
-
-
-# цвета
-black = (0, 0, 0)
-white = (255, 255, 255)
-red = (255, 0, 0)
-green = (0,200,0)
-bright_red = (255,0,0)
-bright_green = (0,255,0)
-
-# кадры в секунду
 clock = pygame.time.Clock()
-
-# игрок
-carImg = pygame.image.load("images/car.png")  # картинка для игрока
-carImg = pygame.transform.scale(carImg, (70, 80))  # задаем размер картинки, если большая
-car_width = 73
-carImg2 = pygame.image.load("images/car2.png")  # картинка для игрока
-carImg2 = pygame.transform.scale(carImg2, (50, 80))  # задаем размер картинки, если большая
-murder = pygame.transform.scale((pygame.image.load('images/14Um.gif')), (130,90))
-
-
-# функция для появляющихся элементов на дороге
-def things(thingx, thingy, thingw, thingh):
-    gameDisplay.blit(murder, (thingx, thingy, thingw, thingh))
-
-
-# отрисовка авто
-def car(x, y):
-    gameDisplay.blit(carImg, (x, y))
-
-
-def car2(w, h):
-    gameDisplay.blit(carImg2, (w, h))
-
-
-def things_dodged(count):
-    font = pygame.font.SysFont(None, 25)
-    text = font.render("Dodged: "+str(count), True, black)
-    gameDisplay.blit(text,(0,0))
-
 
 # обработка текста
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
-
 
 # вывод текста на экран
 def message_display(text):
@@ -80,6 +33,7 @@ def message_display(text):
 def crash():
     message_display('GAME OVER!')
 
+# кнопка старта
 def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -111,6 +65,7 @@ def game_intro():
         largeText = pygame.font.Font('freesansbold.ttf', 80)
         TextSurf, TextRect = text_objects("Don't crash my car", largeText)
         TextRect.center = ((display_width / 2), (display_height / 2))
+        gameDisplay.blit(TextSurf, TextRect)
 
 
         button("GO!", 150, 450, 100, 50, green, bright_green, game_loop)
