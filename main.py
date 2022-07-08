@@ -6,9 +6,9 @@ from setting.display import *
 from setting.players import *
 from setting.murder import *
 from setting.score import *
+from datetime import datetime
 
 pygame.init()
-
 clock = pygame.time.Clock()
 
 # обработка текста
@@ -31,6 +31,9 @@ def message_display(text):
 
 
 def crash():
+    with open("data_and_score.txt", 'a+', encoding='utf8') as file:
+        file.write(str(datetime.now()) + '\n')
+
     message_display('GAME OVER!')
 
 # кнопка старта
@@ -101,6 +104,7 @@ def game_loop():
     while not gameExit:
 
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 gameExit = True
                 pygame.quit()
