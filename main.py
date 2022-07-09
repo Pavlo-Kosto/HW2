@@ -30,9 +30,14 @@ def message_display(text):
     game_loop()
 
 
-def crash():
+def crash(x):
     with open("data_and_score.txt", 'a+', encoding='utf8') as file:
-        file.write(str(datetime.now()) + '\n')
+        if x == 1:
+            file.write(str(datetime.now()) + '\n' + str(x) + " очко \n \n")
+        elif 1 < x < 5:
+            file.write(str(datetime.now()) + '\n' + str(x) + " очка \n \n")
+        else:
+            file.write(str(datetime.now()) + '\n' + str(x) + " очков \n \n")
 
     message_display('GAME OVER!')
 
@@ -156,10 +161,10 @@ def game_loop():
         # задаем границы
         if x > display_width - car_width or x < 0:
             gameExit = True
-            crash()
+            crash(dodged)
         if w > display_width - car_width or w < 0:
             gameExit = True
-            crash()
+            crash(dodged)
 
 
         if thing_starty > display_height:
@@ -174,10 +179,10 @@ def game_loop():
 
             if thing_startx < x < thing_startx + thing_width or thing_startx < x + car_width < thing_startx + thing_width:
                 print('x crossover')
-                crash()
+                crash(dodged)
             if thing_startx < w < thing_startx + thing_width or thing_startx < w + car_width < thing_startx + thing_width:
                 print('x crossover')
-                crash()
+                crash(dodged)
 
         # проверяем на обновления дисплея
         pygame.display.update()
